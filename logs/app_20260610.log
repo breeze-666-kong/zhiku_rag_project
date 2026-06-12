@@ -1,0 +1,2 @@
+2026-06-10 11:16:31.688 | ERROR    | node_pdf_to_md.py   :node_pdf_to_md :227  - >>> [node_pdf_to_md] 错误：PDF转MD失败！错误信息'Response' object has no attribute 'get'
+2026-06-10 11:17:49.026 | ERROR    | node_pdf_to_md.py   :node_pdf_to_md :227  - >>> [node_pdf_to_md] 错误：PDF转MD失败！错误信息write() argument must be str, not bytes
