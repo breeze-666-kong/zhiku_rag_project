@@ -85,7 +85,7 @@ http://www.95105369.com。
 - 将本设备放置在通风良好的环境中。  
 - 为了防止人员受伤，请谨慎操作，避免将手指放置在图中所示的区域中。
 
-![⚠️ 禁止将手指伸入设备内部齿轮/传动机构，禁止在设备运行时强行打开或操作盖板，以防夹伤。](http://localhost:9000/knowledge-base-files/upload-images/hak180产品安全手册/048c005b198be5c9fff80ad6a6ba02496f38fa109ec20dbaabde3110f3eb1574.jpg)
+![⚠️ 禁止将手指伸入设备内部齿轮/传动机构，禁止在设备运行时强行打开或操作盖板。](http://localhost:9000/knowledge-base-files/upload-images/hak180产品安全手册/048c005b198be5c9fff80ad6a6ba02496f38fa109ec20dbaabde3110f3eb1574.jpg)
 
 # 电源线
 
@@ -101,7 +101,7 @@ http://www.95105369.com。
 
 确保本设备的任何部位均未伸出设备所在的桌面或支架。特别是当本设备位于桌面、支架等边缘时，请勿让出纸盒打开。确保本设备位于平整、水平且稳定的表面上，避免震动。不遵守这些预防措施可能导致设备跌落，从而导致用户的人身伤害以及设备严重损坏。
 
-![禁止将设备置于桌面边缘或支架上，避免出纸盒打开导致设备跌落造成人身伤害或设备损坏。](http://localhost:9000/knowledge-base-files/upload-images/hak180产品安全手册/172715f0b7ff402f34ffc53ea23310b5b1817d342d5bc4cf1447552c659ff606.jpg)
+![禁止将设备置于桌面边缘或支架上，避免出纸盒打开导致跌落风险。](http://localhost:9000/knowledge-base-files/upload-images/hak180产品安全手册/172715f0b7ff402f34ffc53ea23310b5b1817d342d5bc4cf1447552c659ff606.jpg)
 
 # 重要事项
 
