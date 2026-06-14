@@ -2,6 +2,9 @@ import sys
 
 from app.core.logger import logger
 from app.import_process.agent.state import ImportGraphState
+from app.lm.embedding_utils import generate_embeddings
+from app.utils.task_utils import add_running_task, add_done_task
+
 
 def node_bge_embedding(state: ImportGraphState) -> ImportGraphState:
     """
@@ -12,5 +15,47 @@ def node_bge_embedding(state: ImportGraphState) -> ImportGraphState:
     2. 对每个 Chunk 的文本进行 Dense (稠密) 和 Sparse (稀疏) 向量化。
     3. 准备好写入 Milvus 的数据格式。
     """
-    logger.info(f">>> [Stub] 执行节点: {sys._getframe().f_code.co_name}")
+    # 获取当前节点名称，用于日志和任务状态记录
+    current_node = sys._getframe().f_code.co_name
+    logger.info(f">>> 开始执行LangGraph节点：{current_node}")
+
+    # 标记任务运行状态，用于任务监控/前端进度展示
+    add_running_task(state.get("task_id", ""), current_node)
+    logger.info("--- BGE-M3 文本向量化处理启动 ---")
+
+    try:
+        # 1.获取要生成向量的chunks
+        chunks = state.get("chunks")
+        if not chunks or not isinstance(chunks, list):
+            logger.error(">>> chunks数据无效，请检查数据格式")
+            raise ValueError(">>> chunks数据无效，请检查数据格式")
+        final_chunks= []
+        batch_size= 5
+        for i in range(0, len(chunks), batch_size):
+            # 本次批量处理的chunk
+            batch_items = chunks[i:i + batch_size]
+            # 定义当前批次的字符串！
+            current_texts = []
+            for item in batch_items:
+                item_name= item.get("item_name")
+                item_content= item.get("content")
+                # 原则：核心词前置 （前置集中力 权重 前128token）
+                item_text = f"商品：{item_name}，内容介绍：{item_content}"
+                current_texts.append(item_text)
+            #当前批次生成的向量
+            result= generate_embeddings(current_texts)
+            # 当前批次的chunk添加向量即可
+            # 完善chunk的属性添加稠密和稀疏向量
+            for i,chunk in enumerate(batch_items):
+                chunk_item = chunk.copy()
+                chunk_item["dense_vector"] = result['dense'][i]
+                chunk_item["sparse_vector"] = result['sparse'][i]
+                final_chunks.append(chunk_item)
+            state["chunks"]= final_chunks
+            logger.info(f"--- BGE-M3 向量化处理完成，共处理 {len(final_chunks)} 条文本切片 ---")
+            add_done_task(state.get("task_id", ""), current_node)
+    except Exception as e:
+        # 捕获节点所有异常，记录错误堆栈，不中断整体流程
+        logger.error(f"BGE-M3向量化节点执行失败：{str(e)}", exc_info=True)
+
     return state
