@@ -64,11 +64,10 @@ def step_1_get_content(state)-> Tuple[str, Path, Path]:
     if not state["md_content"]:
         #没有就读取,有的话不需要,已经给附过值了
         with open(md_path_obj, 'r', encoding='utf-8') as f:
-            md_content= f.read()
-        state["md_content"]= md_content
+            state["md_content"]= f.read()
     #图片文件夹
     images_dir_obj=md_path_obj.parent /"images"
-    return md_content, md_path_obj, images_dir_obj
+    return state["md_content"], md_path_obj, images_dir_obj
 
 
 def find_image_in_md_content(md_content, image_file,context_length:int=100):

@@ -1,0 +1,107 @@
+2026-06-15 09:14:23.954 | ERROR    | minio_utils.py      :<module>       :46   - MinIO客户端初始化失败，错误信息：HTTPConnectionPool(host='localhost', port=9000): Max retries exceeded with url: /knowledge-base-files?location= (Caused by NewConnectionError("HTTPConnection(host='localhost', port=9000): Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。"))
+2026-06-15 09:22:47.949 | ERROR    | main_graph.py       :<module>       :133  - ===== 全流程测试运行失败 =====
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\import_process\agent\main_graph.py", line 105, in <module>
+    for step in kb_import_app.stream(test_state, stream_mode="values"):
+        │       │             │      └ {'task_id': 'test_kg_import_workflow_001', 'user_id': 'test_user', 'local_file_path': 'D:\\develop\\zhiku_rag\\doc\\hak180产品安...
+        │       │             └ <function Pregel.stream at 0x00000246DC33E340>
+        │       └ <langgraph.graph.state.CompiledStateGraph object at 0x00000247425B6010>
+        └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x00000246DC2FC720>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x00000247425C3E90>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x00000246DC2EFCE0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_md_img', input={'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pd...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_md_img', input={'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pd...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+            │       │   │    └ <function RunnableCallable.invoke at 0x00000246DBF636A0>
+            │       │   └ node_md_img(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x00000246DF520680>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPat...
+          │    └ <function node_md_img at 0x00000246EB91EDE0>
+          └ node_md_img(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\import_process\agent\nodes\node_md_img.py", line 282, in node_md_img
+    md_content,md_path_obj,images_dir_obj= step_1_get_content(state)
+                                           │                  └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+                                           └ <function step_1_get_content at 0x00000246E433E340>
+
+  File "D:\develop\zhiku_rag\app\import_process\agent\nodes\node_md_img.py", line 71, in step_1_get_content
+    return md_content, md_path_obj, images_dir_obj
+                       │            └ WindowsPath('D:/develop/zhiku_rag/output/hak180产品安全手册/images')
+                       └ WindowsPath('D:/develop/zhiku_rag/output/hak180产品安全手册/hak180产品安全手册.md')
+
+UnboundLocalError: cannot access local variable 'md_content' where it is not associated with a value
+During task with name 'node_md_img' and id '38c9b7bc-e711-f30b-edc7-f01ddc0cd10d'
+2026-06-15 09:23:53.963 | ERROR    | main_graph.py       :<module>       :133  - ===== 全流程测试运行失败 =====
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\import_process\agent\main_graph.py", line 105, in <module>
+    for step in kb_import_app.stream(test_state, stream_mode="values"):
+        │       │             │      └ {'task_id': 'test_kg_import_workflow_001', 'user_id': 'test_user', 'local_file_path': 'D:\\develop\\zhiku_rag\\doc\\hak180产品安...
+        │       │             └ <function Pregel.stream at 0x00000172C824E340>
+        │       └ <langgraph.graph.state.CompiledStateGraph object at 0x000001733F1B2090>
+        └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x00000172C820C720>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x000001733F1D70D0>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x00000172C81FFCE0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_md_img', input={'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pd...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_md_img', input={'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pd...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+            │       │   │    └ <function RunnableCallable.invoke at 0x00000172C7E776A0>
+            │       │   └ node_md_img(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x00000172D78C19C0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPat...
+          │    └ <function node_md_img at 0x00000172D7842E80>
+          └ node_md_img(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\import_process\agent\nodes\node_md_img.py", line 282, in node_md_img
+    md_content,md_path_obj,images_dir_obj= step_1_get_content(state)
+                                           │                  └ {'task_id': 'test_kg_import_workflow_001', 'is_md_read_enabled': False, 'is_pdf_read_enabled': True, 'local_dir': WindowsPath...
+                                           └ <function step_1_get_content at 0x00000172D024E3E0>
+
+  File "D:\develop\zhiku_rag\app\import_process\agent\nodes\node_md_img.py", line 71, in step_1_get_content
+    return md_content, md_path_obj, images_dir_obj
+                       │            └ WindowsPath('D:/develop/zhiku_rag/output/hak180产品安全手册/images')
+                       └ WindowsPath('D:/develop/zhiku_rag/output/hak180产品安全手册/hak180产品安全手册.md')
+
+UnboundLocalError: cannot access local variable 'md_content' where it is not associated with a value
+During task with name 'node_md_img' and id '1601d53f-7f30-c449-b3f1-f08094b2223a'
