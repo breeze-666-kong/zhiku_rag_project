@@ -44,8 +44,8 @@ def run_import_graph(task_id: str, local_file_path: str, local_dir: str):
     :param local_dir: 输出文件夹的地址
     :return:
     """
-    add_done_task(task_id, "upload_file")
-    add_running_task(task_id, "upload_file")
+    # add_done_task(task_id, "upload_file")
+    # add_running_task(task_id, "upload_file")
     try:
         update_task_status(task_id, "processing")
         init_state= get_default_state()
