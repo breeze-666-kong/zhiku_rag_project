@@ -213,7 +213,7 @@ def node_item_name_confirm(state):
     # 记录任务开始
     add_running_task(state["session_id"], sys._getframe().f_code.co_name,state["is_stream"])
     #1.获取历史消息
-    history = get_recent_messages(state["session_id"])
+    history = get_recent_messages(state["session_id"],limit=10)
     # # 2.保存本次聊天消息,放到最后了,因为在这里的item_names是没有任何东西的
     # message= save_chat_message(
     #     session_id=state["session_id"],

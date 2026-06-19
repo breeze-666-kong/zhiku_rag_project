@@ -87,6 +87,52 @@ def step_2_rerank_doc_list(doc_list, state):
     logger.info(f"已经完成排序和打分！最终结果为：{doc_list_with_scores}")
     return doc_list_with_scores
 
+
+def step_3_topk(rerank_score_list):
+    """
+    动态topk(最多10)
+    基于 scored_docs（已按 score 降序排序）进行智能截断，
+    核心逻辑：结合固定上下限+断崖阈值判断，避免机械取前N条，保留语义相关的连续文档集合
+    :param rerank_score_list:[{"doc": 文档对象, "score": 相关性分数}, ...]
+    :return:
+    """
+    max_topk = min(RERANK_MAX_TOPK, len(rerank_score_list))
+    min_topk = RERANK_MIN_TOPK  # 硬下限：至少保留的文档数量（全局常量配置）
+    gap_ratio = RERANK_GAP_RATIO  # 相对断崖阈值：分数下降的相对比例阈值（全局常量配置）
+    gap_abs = RERANK_GAP_ABS  # 绝对断崖阈值：分数下降的绝对差值阈值（全局常量配置）
+    # 1) 断崖截断核心逻辑：从min_topk之后开始检测分数断崖，出现则提前截断
+    topk = max_topk  # 默认值：无断崖时取满硬上限（最多10条）
+    # 仅当实际可取值超过硬下限时，才触发断崖检测（否则直接取满min_topk）
+    if topk > min_topk:
+        # 遍历范围：从min_topk-1到max_topk-2（索引从0开始），检测相邻两个文档的分数差
+        # 例：min_topk=3，max_topk=10 → 遍历i=2,3,4,5,6,7,8（对应第3~9条文档，检测与下一条的差距）
+        for i in range(min_topk - 1, max_topk - 1):
+            s1 = rerank_score_list[i].get("score")  # 当前位置文档的分数
+            s2 = rerank_score_list[i + 1].get("score")  # 下一个位置文档的分数
+
+            gap = s1 - s2  # 计算相邻文档的分数绝对差距（因已降序，gap≥0）
+            # 计算相对差距：绝对差距 / 当前文档分数（+1e-6避免除数为0/极小值，防止程序报错）
+            # 1e-6 是 Python 中科学计数法的写法，等价于 0.000001（10 的负 6 次方，也就是百万分之一）。
+            rel = gap / (abs(s1) + 1e-6)
+            # 触发断崖截断条件：绝对差距≥绝对阈值 OR 相对差距≥相对阈值
+            # 满足任一条件，说明下一条文档相关性骤降，截断在当前位置
+            if gap >= gap_abs or rel >= gap_ratio:
+                logger.info(f"Step 3: 触发断崖截断 @ index={i} (Score {s1:.4f} -> {s2:.4f}, Gap={gap:.4f})")
+                topk = i + 1  # 最终取前i+1条（索引转实际数量，如i=2 → 取前3条）
+                break  # 触发截断后立即退出循环，不再检测后续位置
+
+    # 按最终计算的topk值，截取前topk条文档
+    topk_docs = rerank_score_list[:topk]
+
+    logger.info(f"Step 3: 截断完成，保留前 {len(topk_docs)} 条文档 (TopK={topk})")
+
+    if topk_docs:
+        preview = ", ".join([f"{d.get('chunk_id') or 'Web'}({d.get('score'):.3f})" for d in topk_docs[:3]])
+        logger.debug(f"Step 3: Top3 文档预览: {preview}")
+
+    # 返回动态TopK处理后的文档列表
+    return topk_docs
+
 def node_rerank(state):
     """
     节点功能：使用 Cross-Encoder 模型对 RRF 后的结果进行精确打分重排。
@@ -125,14 +171,12 @@ def node_rerank(state):
     """
     rerank_score_list = step_2_rerank_doc_list(doc_list, state)
     # 3. 启动算法进行放断崖以及topk处理
+    topk_docs = step_3_topk(rerank_score_list)
 
-    # 4. 结果装到state中即可
+    logger.info(f"Rerank 节点处理结束, 最终输出 {len(topk_docs)} 条文档")
 
-
-
-    logger.info("---Rerank处理结束---")
     add_done_task(state['session_id'], sys._getframe().f_code.co_name, state.get("is_stream"))
-    return state
+    return {"reranked_docs": topk_docs}
 
 if __name__ == "__main__":
     print("\n" + "=" * 50)

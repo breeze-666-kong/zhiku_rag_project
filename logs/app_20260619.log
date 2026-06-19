@@ -1,0 +1,297 @@
+2026-06-19 14:33:25.701 | ERROR    | query_server.py     :run_query_graph:72   - ---session_id = sess-o4l83ks6g59mqhr8ssj,查询流程出现异常！！save_chat_message() missing 1 required positional argument: 'text'
+Traceback (most recent call last):
+
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000024B03132C00>
+    └ <WorkerThread(AnyIO worker thread, started 8980)>
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x0000024BA07DFBA0>
+    └ <WorkerThread(AnyIO worker thread, started 8980)>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             │       │   │      └ ()
+             │       │   └ functools.partial(<function run_query_graph at 0x0000024BA0755EE0>, 'sess-o4l83ks6g59mqhr8ssj', 'H3C LA2608室内无线网关的 1.2.2 配置运营...
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x0000024BA0801CC0>
+
+> File "D:\develop\zhiku_rag\app\query_process\api\query_server.py", line 68, in run_query_graph
+    query_app.invoke(state)
+    │         │      └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+    │         └ <function Pregel.invoke at 0x0000024B29A18EA0>
+    └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024BA05F5AD0>
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3884, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x0000024B29A18040>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024BA05F5AD0>
+        └ ('values', {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': ...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x0000024B299BE3E0>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x0000024BA05F5C50>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x0000024B299BD9E0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embed...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embed...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+            │       │   │    └ <function RunnableCallable.invoke at 0x0000024B29649260>
+            │       │   └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x0000024BA0421700>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_s...
+          │    └ <function node_answer_output at 0x0000024B3002C540>
+          └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 207, in node_answer_output
+    answer_exists=step_1_check_answer(state)
+                  │                   └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+                  └ <function step_1_check_answer at 0x0000024B2866A2A0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 27, in step_1_check_answer
+    save_chat_message(state, answer)
+    │                 │      └ '请您重新输入问题，我无法理解'
+    │                 └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+    └ <function save_chat_message at 0x0000024B28669620>
+
+TypeError: save_chat_message() missing 1 required positional argument: 'text'
+During task with name 'node_answer_output' and id '4d6e7d99-95a1-972c-3d02-229c9e1c9414'
+2026-06-19 14:33:48.928 | ERROR    | query_server.py     :run_query_graph:72   - ---session_id = sess-o4l83ks6g59mqhr8ssj,查询流程出现异常！！save_chat_message() missing 1 required positional argument: 'text'
+Traceback (most recent call last):
+
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000024B03132C00>
+    └ <WorkerThread(AnyIO worker thread, started 8980)>
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x0000024BA07DFBA0>
+    └ <WorkerThread(AnyIO worker thread, started 8980)>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             │       │   │      └ ()
+             │       │   └ functools.partial(<function run_query_graph at 0x0000024BA0755EE0>, 'sess-o4l83ks6g59mqhr8ssj', 'H3C LA2608室内无线网关', True)
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x0000024BA0704E40>
+
+> File "D:\develop\zhiku_rag\app\query_process\api\query_server.py", line 68, in run_query_graph
+    query_app.invoke(state)
+    │         │      └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+    │         └ <function Pregel.invoke at 0x0000024B29A18EA0>
+    └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024BA05F5AD0>
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3884, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x0000024B29A18040>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024BA05F5AD0>
+        └ ('values', {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': ...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x0000024B299BE3E0>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x0000024BA150AD10>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x0000024B299BD9E0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embed...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embed...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+            │       │   │    └ <function RunnableCallable.invoke at 0x0000024B29649260>
+            │       │   └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x0000024BA0704D40>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_s...
+          │    └ <function node_answer_output at 0x0000024B3002C540>
+          └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 207, in node_answer_output
+    answer_exists=step_1_check_answer(state)
+                  │                   └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+                  └ <function step_1_check_answer at 0x0000024B2866A2A0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 27, in step_1_check_answer
+    save_chat_message(state, answer)
+    │                 │      └ '请您重新输入问题，我无法理解'
+    │                 └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': '', 'embedding_chunks': [], 'hyde_embedding_chunks': [], 'web_se...
+    └ <function save_chat_message at 0x0000024B28669620>
+
+TypeError: save_chat_message() missing 1 required positional argument: 'text'
+During task with name 'node_answer_output' and id '156a3bb4-b17c-6c24-6d56-c2c38fd5a04e'
+2026-06-19 14:57:46.981 | ERROR    | query_server.py     :run_query_graph:71   - ---session_id = sess-o4l83ks6g59mqhr8ssj,查询流程出现异常！！'ChatOpenAI' object has no attribute 'stream_generate'
+Traceback (most recent call last):
+
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000024EBF172C00>
+    └ <WorkerThread(AnyIO worker thread, started 4104)>
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x0000024F43F085E0>
+    └ <WorkerThread(AnyIO worker thread, started 4104)>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             │       │   │      └ ()
+             │       │   └ functools.partial(<function run_query_graph at 0x0000024F43C26340>, 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关...
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x0000024F43ABD780>
+
+> File "D:\develop\zhiku_rag\app\query_process\api\query_server.py", line 67, in run_query_graph
+    query_app.invoke(state)
+    │         │      └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+    │         └ <function Pregel.invoke at 0x0000024EE5A1CFE0>
+    └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024F43BDB850>
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3884, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x0000024EE5A1C180>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x0000024F43BDB850>
+        └ ('values', {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x0000024EE59CA520>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x0000024F43F26C90>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x0000024EE59C9B20>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA260...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA260...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+            │       │   │    └ <function RunnableCallable.invoke at 0x0000024EE56593A0>
+            │       │   └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x0000024F4C1185C0>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C L...
+          │    └ <function node_answer_output at 0x0000024EEC038900>
+          └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 211, in node_answer_output
+    answer = step_3_create_answer(state, prompt)
+             │                    │      └ '你是一个智能助手，请根据参考内容回答用户的问题。\n要求：\n1 尽量基于【参考内容】和【用户问题】 作答，不要编造不存在的事实。\n2 如果用户的问题需要通过图片来辅助说明（例如：外观、结构、接线、示意图等）,图片只能来自于本地切片文本中的图片，...
+             │                    └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+             └ <function step_3_create_answer at 0x0000024EE5A391C0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 117, in step_3_create_answer
+    for chunk in model.stream_generate(prompt):
+                 │                     └ '你是一个智能助手，请根据参考内容回答用户的问题。\n要求：\n1 尽量基于【参考内容】和【用户问题】 作答，不要编造不存在的事实。\n2 如果用户的问题需要通过图片来辅助说明（例如：外观、结构、接线、示意图等）,图片只能来自于本地切片文本中的图片，...
+                 └ ChatOpenAI(client=<openai.resources.chat.completions.completions.Completions object at 0x0000024F4C128E10>, async_client=<ope...
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\pydantic\main.py", line 891, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+
+AttributeError: 'ChatOpenAI' object has no attribute 'stream_generate'
+During task with name 'node_answer_output' and id 'afd81251-f069-8e0d-c216-8c7236a83be0'
+2026-06-19 14:59:52.791 | ERROR    | query_server.py     :run_query_graph:71   - ---session_id = sess-o4l83ks6g59mqhr8ssj,查询流程出现异常！！'AIMessageChunk' object has no attribute 'get'
+Traceback (most recent call last):
+
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001A5B8C92C00>
+    └ <WorkerThread(AnyIO worker thread, started 26192)>
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+    │    └ <function WorkerThread.run at 0x000001A643F38180>
+    └ <WorkerThread(AnyIO worker thread, started 26192)>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             │       │   │      └ ()
+             │       │   └ functools.partial(<function run_query_graph at 0x000001A643C6A2A0>, 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关...
+             │       └ <method 'run' of '_contextvars.Context' objects>
+             └ <_contextvars.Context object at 0x000001A643C2B880>
+
+> File "D:\develop\zhiku_rag\app\query_process\api\query_server.py", line 67, in run_query_graph
+    query_app.invoke(state)
+    │         │      └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+    │         └ <function Pregel.invoke at 0x000001A5DF56CFE0>
+    └ <langgraph.graph.state.CompiledStateGraph object at 0x000001A643C29890>
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3884, in invoke
+    for chunk in self.stream(
+        │        │    └ <function Pregel.stream at 0x000001A5DF56C180>
+        │        └ <langgraph.graph.state.CompiledStateGraph object at 0x000001A643C29890>
+        └ ('values', {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2938, in stream
+    for _ in runner.tick(
+        │    │      └ <function PregelRunner.tick at 0x000001A5DF51A520>
+        │    └ <langgraph.pregel._runner.PregelRunner object at 0x000001A643C7E690>
+        └ None
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+    └ <function run_with_retry at 0x000001A5DF519B20>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           │    │           │    │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+           │    │           │    └ <member 'input' of 'PregelExecutableTask' objects>
+           │    │           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA260...
+           │    └ <member 'proc' of 'PregelExecutableTask' objects>
+           └ PregelExecutableTask(name='node_answer_output', input={'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA260...
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 684, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            │       │   │    │       │      │         └ {}
+            │       │   │    │       │      └ {'configurable': {'__pregel_runtime': Runtime(context=None, store=None, stream_writer=<function Pregel.stream.<locals>.stream...
+            │       │   │    │       └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+            │       │   │    └ <function RunnableCallable.invoke at 0x000001A5DF1A93A0>
+            │       │   └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+            │       └ <method 'run' of '_contextvars.Context' objects>
+            └ <_contextvars.Context object at 0x000001A64BFF9180>
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 426, in invoke
+    ret = self.func(*args, **kwargs)
+          │    │     │       └ {}
+          │    │     └ ({'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C L...
+          │    └ <function node_answer_output at 0x000001A5E5B88720>
+          └ node_answer_output(tags=None, recurse=True, explode_args=False, func_accepts={})
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 211, in node_answer_output
+    answer = step_3_create_answer(state, prompt)
+             │                    │      └ '你是一个智能助手，请根据参考内容回答用户的问题。\n要求：\n1 尽量基于【参考内容】和【用户问题】 作答，不要编造不存在的事实。\n2 如果用户的问题需要通过图片来辅助说明（例如：外观、结构、接线、示意图等）,图片只能来自于本地切片文本中的图片，...
+             │                    └ {'session_id': 'sess-o4l83ks6g59mqhr8ssj', 'original_query': 'H3C LA2608室内无线网关的 1.2.2 配置运营商无线控制器 ![黄色铅笔正在纸上书写，象征用户手册中关于H3C LA...
+             └ <function step_3_create_answer at 0x000001A5DF588FE0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_answer_output.py", line 119, in step_3_create_answer
+    delta= chunk.get("content")# 1 | 2 3 | 4 | 5 6 7 |
+           └ AIMessageChunk(content='', additional_kwargs={}, response_metadata={'model_provider': 'openai'}, id='lc_run--019edead-cbe7-7e...
+
+  File "D:\develop\zhiku_rag\.venv\Lib\site-packages\pydantic\main.py", line 891, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+
+AttributeError: 'AIMessageChunk' object has no attribute 'get'
+During task with name 'node_answer_output' and id '971f06de-c896-09a7-c783-213e64fa59a1'
