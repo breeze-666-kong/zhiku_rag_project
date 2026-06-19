@@ -1,6 +1,53 @@
-import time
+import asyncio
+import os
+import json
 import sys
-from app.utils.task_utils import add_done_task,add_running_task
+from agents.mcp import MCPServerSse # pip install openai-agents
+from agents.mcp import MCPServerStreamableHttp # pip install openai-agents
+from dotenv import load_dotenv
+
+from app.core.logger import  logger
+
+from app.conf.bailian_mcp_config import mcp_config
+from app.utils.task_utils import add_running_task,add_done_task
+
+DASHSCOPE_BASE_URL_STREAMABLE = mcp_config.mcp_base_url
+DASHSCOPE_API_KEY = mcp_config.api_key
+
+
+async def mcp_call_streamable(rewritten_query):
+    """
+    使用阿里云百炼联网搜索工具
+    :param rewritten_query:
+    :return:
+    """
+    #1.创建MCPHttpClient
+    mcp_client= MCPServerStreamableHttp(
+        name="mcp_web_search",
+        params={
+            "url":DASHSCOPE_BASE_URL_STREAMABLE,
+            "headers": {"Authorization": f"Bearer {DASHSCOPE_API_KEY}"},
+            "timeout": 10
+        },
+        max_retry_attempts=3
+    )
+    #2.调用
+    try:
+        await mcp_client.connect()
+        tools= await mcp_client.list_tools()
+        logger.info(f"mcp工具列表为:{tools}")
+        result= await mcp_client.call_tool(
+            tool_name="bailian_web_search",
+            arguments={
+                "query": rewritten_query,
+                "count": 5
+            }
+        )
+        logger.info(f"mcp搜索的结果为:{result}")
+        return  result
+    finally:
+        await mcp_client.cleanup()
+
 
 def node_web_search_mcp(state):
     """
@@ -9,12 +56,49 @@ def node_web_search_mcp(state):
     :return:
     """
     add_running_task(state["session_id"], sys._getframe().f_code.co_name,state["is_stream"])
-    print("---node-web-search-mcp处理---")
+    logger.info("---node-web-search-mcp处理---")
+    #1.获得参数 rewritten_query
+    rewritten_query = state.get("rewritten_query")
+    #2.调用streamable网络搜索方法
+    result= asyncio.run(mcp_call_streamable(rewritten_query))
+    #3.处理结果即可
+        #{
+        #   "isError": false,
+        #   "content": [
+        #     {
+        #       "text": "{\"pages\":[{\"snippet\":\"和讯首页|手机和讯 登录注册 股票客户端 Android 股票客户端 iPhone\",\"hostname\":\"和讯网\",\"hostlogo\":\"https://img.alicdn.com/imgextra/i3/O1CN01VcUfI91cc0kCH3Gt2_!!6000000003620-73-tps-32-32.ico\",
+        #                               \"title\":\"行情中心-和讯网 国内全面的即时行情数据服务中心\",
+        #                               \"url\":\"https://quote.hexun.com/\"},
+        #                            {\"snippet\":\"数据中心\",\"hostname\":\"东方财富网\",\"hostlogo\":\"https://img.alicdn.com/imgextra/i1/O1CN01iL4mYC1cF6vgiem0A_!!6000000003570-55-tps-32-32.svg\",\"title\":\"股票\",\"url\":\"https://stock.eastmoney.com/\"},{\"snippet\":\"意见反馈\",\"hostname\":\"东方财富网\",\"hostlogo\":\"https://quote.eastmoney.com/favicon.ico\",\"title\":\"行情中心:国内快捷全面的股票、基金、期货、美股、港股、外汇、黄金、债券行情系统_东方财富网\",\"url\":\"https://quote.eastmoney.com/center/qqzs.html#!/stealingyourhistory\"}],\"request_id\":\"faa40120-ee17-4401-a6c5-9970da077c05\",\"tools\":[],\"status\":0}",
+        #       "type": "text"
+        #     }
+        #   ]
+        # }
+    web_documents = json.loads(result.content[0].text).get("pages",[])
+    logger.info(f"mcp搜索的结果为:{web_documents}")
+    logger.info("---node-web-search-mcp处理结束---")
+    add_done_task(state["session_id"], sys._getframe().f_code.co_name, state["is_stream"])
+    # 并行的 不要直接返回state
+    return {
+        "web_search_docs": web_documents
+    }
 
-    add_done_task(state["session_id"],sys._getframe().f_code.co_name,state["is_stream"])
-    time.sleep(1)
-    # 调用mcp外部引擎
-    print(f"调用外部mcp引擎")
+if __name__ == '__main__':
+    load_dotenv()
+    test_state = {
+        "session_id":"mcp_01",
+        "rewritten_query": "HAK 180 在出厂默认状态下，若想在纸张上只把烫金膜转印到顶部 50 mm–170 mm 的局部区域，应在操作面板上如何设置",
+        "is_stream":True
+    }
 
-    print("---node-web-search-mcp处理结束---")
-    return {"web_search_docs": []}
+    # 调用 websearch_node 函数
+    result_state = node_web_search_mcp(test_state)
+
+    # 验证结果
+    print("测试结果:")
+    print(f"查询内容: {test_state.get('rewritten_query')}")
+
+    # 输出搜索结果
+    search_results = result_state.get('web_search_docs', [])
+    print(f"搜索结果数量: {len(search_results)}")
+    print("search_results", search_results)

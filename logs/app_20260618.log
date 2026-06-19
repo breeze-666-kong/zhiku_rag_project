@@ -1,0 +1,193 @@
+2026-06-18 10:55:39.858 | ERROR    | node_item_name_confirm.py:<module>       :300  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 288, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                   └ <function node_item_name_confirm at 0x000001F58235FC40>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 226, in node_item_name_confirm
+    item_names_and_rewritten_query= step_3_llm_item_name_and_rewrite_query(state["original_query"],history)
+                                    │                                      │                       └ []
+                                    │                                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                                    └ <function step_3_llm_item_name_and_rewrite_query at 0x000001F5CC868C20>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 33, in step_3_llm_item_name_and_rewrite_query
+    prompt= load_prompt("rewritten_query_and_itemnames" ,history_text=history_text,
+            │                                                         └ ''
+            └ <function load_prompt at 0x000001F5CDC8A2A0>
+
+  File "D:\develop\zhiku_rag\app\core\load_prompt.py", line 24, in load_prompt
+    rendered_prompt = raw_prompt.format(**kwargs)
+                      │          │        └ {'history_text': '', 'original_query': '华为显示器好用么？？'}
+                      │          └ <method 'format' of 'str' objects>
+                      └ '历史会话：\n{history_text}\n\n当前用户问题：{query}\n\n请根据历史会话和当前问题，提取用户正在询问的商品名称（item_names）。\n1. 如果用户明确提到了商品名称，请提取出来。可能有一个或多个，但不能重复。\n...
+
+KeyError: 'query'
+2026-06-18 10:58:28.619 | ERROR    | node_item_name_confirm.py:<module>       :300  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 288, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False, 'answer': '请您重新输入问题，我无法理解'}
+                   └ <function node_item_name_confirm at 0x000002971F7FFBA0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 246, in node_item_name_confirm
+    state = step_6_deal_list(state, item_results, history, rewritten_query)
+            │                │      │             │        └ '华为显示器好用么？'
+            │                │      │             └ []
+            │                │      └ {}
+            │                └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False, 'answer': '请您重新输入问题，我无法理解'}
+            └ <function step_6_deal_list at 0x000002971F7FFB00>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 194, in step_6_deal_list
+    logger.info(f"没有匹配的item_name，忽略：{state['query']}")
+    │      └ <function Logger.info at 0x000002976AB6CE00>
+    └ <loguru.logger handlers=[(id=1, level=20, sink=<stdout>), (id=2, level=40, sink='D:\develop\zhiku_rag\logs\app_{time:YYYYMMDD...
+
+KeyError: 'query'
+2026-06-18 11:15:27.587 | ERROR    | node_item_name_confirm.py:<module>       :290  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 278, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                   └ <function node_item_name_confirm at 0x0000023BC4EDFA60>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 248, in node_item_name_confirm
+    state = step_6_deal_list(state, item_results, history, rewritten_query)
+            │                │      │             │        └ '华为显示器好用吗？'
+            │                │      │             └ [{'_id': ObjectId('6a336058b19bb5eef75f13c7'), 'session_id': 'test_session_001', 'role': 'user', 'text': '华为显示器好用么？？', 'rewri...
+            │                │      └ None
+            │                └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+            └ <function step_6_deal_list at 0x0000023BC4EDF9C0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 175, in step_6_deal_list
+    confirmed_item_names = item_results.get("confirmed_item_names", [])
+                           └ None
+
+AttributeError: 'NoneType' object has no attribute 'get'
+2026-06-18 11:16:33.008 | ERROR    | node_item_name_confirm.py:<module>       :290  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 278, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                   └ <function node_item_name_confirm at 0x0000024286FFFCE0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 248, in node_item_name_confirm
+    state = step_6_deal_list(state, item_results, history, rewritten_query)
+            │                │      │             │        └ '华为显示器好用吗？'
+            │                │      │             └ [{'_id': ObjectId('6a336058b19bb5eef75f13c7'), 'session_id': 'test_session_001', 'role': 'user', 'text': '华为显示器好用么？？', 'rewri...
+            │                │      └ None
+            │                └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+            └ <function step_6_deal_list at 0x0000024286FFFC40>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 175, in step_6_deal_list
+    confirmed_item_names = item_results.get("confirmed_item_names", [])
+                           └ None
+
+AttributeError: 'NoneType' object has no attribute 'get'
+2026-06-18 11:20:15.976 | ERROR    | node_item_name_confirm.py:<module>       :289  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 277, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                   └ <function node_item_name_confirm at 0x0000018326FCFBA0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 247, in node_item_name_confirm
+    state = step_6_deal_list(state, item_results, history, rewritten_query)
+            │                │      │             │        └ '华为显示器好用吗？'
+            │                │      │             └ [{'_id': ObjectId('6a336058b19bb5eef75f13c7'), 'session_id': 'test_session_001', 'role': 'user', 'text': '华为显示器好用么？？', 'rewri...
+            │                │      └ None
+            │                └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+            └ <function step_6_deal_list at 0x0000018326FCFB00>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 174, in step_6_deal_list
+    confirmed_item_names = item_results.get("confirmed_item_names", [])
+                           └ None
+
+AttributeError: 'NoneType' object has no attribute 'get'
+2026-06-18 11:28:22.081 | ERROR    | node_item_name_confirm.py:<module>       :289  - ==========
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 277, in <module>
+    result_state = node_item_name_confirm(mock_state)
+                   │                      └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+                   └ <function node_item_name_confirm at 0x0000020DFBDCFBA0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 247, in node_item_name_confirm
+    state = step_6_deal_list(state, item_results, history, rewritten_query)
+            │                │      │             │        └ '华为显示器好用吗？'
+            │                │      │             └ [{'_id': ObjectId('6a336058b19bb5eef75f13c7'), 'session_id': 'test_session_001', 'role': 'user', 'text': '华为显示器好用么？？', 'rewri...
+            │                │      └ None
+            │                └ {'session_id': 'test_session_001', 'original_query': '华为显示器好用么？？', 'is_stream': False}
+            └ <function step_6_deal_list at 0x0000020DFBDCFB00>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_item_name_confirm.py", line 174, in step_6_deal_list
+    confirmed_item_names = item_results.get("confirmed_item_names", [])
+                           └ None
+
+AttributeError: 'NoneType' object has no attribute 'get'
+2026-06-18 12:02:15.025 | ERROR    | node_search_embedding.py:<module>       :74   - 测试运行失败: 参数texts必须是包含文本的非空列表
+2026-06-18 14:25:26.089 | ERROR    | node_search_embedding_hyde.py:<module>       :112  - 测试运行期间发生未捕获异常: can only concatenate str (not "AIMessage") to str
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_search_embedding_hyde.py", line 107, in <module>
+    result = node_search_embedding_hyde(mock_state)
+             │                          └ {'session_id': 'test_hyde_session_001', 'original_query': '华为B3-211H显示器怎么操作？', 'rewritten_query': '华为B3-211H显示器的具体操作步骤是什么？', ...
+             └ <function node_search_embedding_hyde at 0x000001756DF3E200>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_search_embedding_hyde.py", line 79, in node_search_embedding_hyde
+    embeddings_query = step3_search_embedding(hyde_answer, rewritten_query,item_names)
+                       │                      │            │               └ ['华为B3-211H显示器']
+                       │                      │            └ '华为B3-211H显示器的具体操作步骤是什么？'
+                       │                      └ AIMessage(content='华为B3-211H为一款支持USB-C接口的21.5英寸显示器，操作步骤如下：  \n1. 连接电源：将电源适配器接入显示器底部电源接口，接通市电。  \n2. 接入信号源：通过USB-C线缆连接电脑或兼容设备（...
+                       └ <function step3_search_embedding at 0x000001754025FCE0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_search_embedding_hyde.py", line 40, in step3_search_embedding
+    query_str = rewritten_query + hyde_answer
+                │                 └ AIMessage(content='华为B3-211H为一款支持USB-C接口的21.5英寸显示器，操作步骤如下：  \n1. 连接电源：将电源适配器接入显示器底部电源接口，接通市电。  \n2. 接入信号源：通过USB-C线缆连接电脑或兼容设备（...
+                └ '华为B3-211H显示器的具体操作步骤是什么？'
+
+TypeError: can only concatenate str (not "AIMessage") to str
+2026-06-18 18:05:21.339 | ERROR    | node_rrf.py         :<module>       :112  - 测试运行期间发生未捕获异常: name 'source_with_weight' is not defined
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rrf.py", line 91, in <module>
+    result = node_rrf(mock_state)
+             │        └ {'session_id': 'test_rrf_session', 'is_stream': False, 'original_query': '华为B3-211H显示器怎么操作？', 'rewritten_query': '华为B3-211H显示...
+             └ <function node_rrf at 0x00000227CA948040>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rrf.py", line 61, in node_rrf
+    rrf_response= step_3_reciprocal_rank_fusion(source_with_weight)
+                  └ <function step_3_reciprocal_rank_fusion at 0x00000227CA550540>
+
+NameError: name 'source_with_weight' is not defined
+2026-06-18 20:52:21.237 | ERROR    | node_rerank.py      :<module>       :192  - 测试运行期间发生未捕获异常: 'NoneType' object is not iterable
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rerank.py", line 166, in <module>
+    result = node_rerank(mock_state)
+             │           └ {'session_id': 'test_rerank_session', 'rewritten_query': '什么是RRF和Rerank？', 'rrf_chunks': [{'entity': {'chunk_id': 'local_1', ...
+             └ <function node_rerank at 0x000001A568F56200>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rerank.py", line 112, in node_rerank
+    doc_list = step_1_merge_rrf_mcp(state)
+               │                    └ {'session_id': 'test_rerank_session', 'rewritten_query': '什么是RRF和Rerank？', 'rrf_chunks': [{'entity': {'chunk_id': 'local_1', ...
+               └ <function step_1_merge_rrf_mcp at 0x000001A54419CCC0>
+
+  File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rerank.py", line 49, in step_1_merge_rrf_mcp
+    for doc in mcp_chunks:
+               └ None
+
+TypeError: 'NoneType' object is not iterable
+2026-06-18 20:55:25.115 | ERROR    | node_rerank.py      :<module>       :192  - 测试运行期间发生未捕获异常: list index out of range
+Traceback (most recent call last):
+
+> File "D:\develop\zhiku_rag\app\query_process\agent\nodes\node_rerank.py", line 183, in <module>
+    top1_score = reranked[0].get("score")
+                 └ []
+
+IndexError: list index out of range

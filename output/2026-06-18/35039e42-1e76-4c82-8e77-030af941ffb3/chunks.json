@@ -1,0 +1,72 @@
+[
+    {
+        "title": "# 目 录",
+        "content": "# 目 录\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 目 录"
+    },
+    {
+        "title": "# 1 H3C LA2608 室内无线网关用户手册 1",
+        "content": "# 1 H3C LA2608 室内无线网关用户手册 1\n\n1.1 概述 ···   \n1.2 配置LA2608 与无线控制器互通\n\n1.2.1 配置LA2608 ··  \n1.2.2 配置运营商无线控制器  \n1.2.3 验证LA2608 与无线控制器是否连通 · · 3\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1 H3C LA2608 室内无线网关用户手册 1"
+    },
+    {
+        "title": "# 1 H3C LA2608 室内无线网关用户手册",
+        "content": "# 1 H3C LA2608 室内无线网关用户手册\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1 H3C LA2608 室内无线网关用户手册"
+    },
+    {
+        "title": "# 1.1 概述",
+        "content": "# 1.1 概述\n\nH3C LA2608-GM/GU 室内无线网关（以下简称 LA2608）可以为用户提供无线服务，为了实现对设备的管理，LA2608需要通过 3G/4G网络连接到运营商无线控制器。\n\n![黄色铅笔正在纸张上书写，象征设备配置或操作说明的开始。](http://localhost:9000/knowledge-base-files/upload-images/H3C LA2608室内无线网关 用户手册-6W100-整本手册/0e2eb77b873265be02b023ce2afe6cf44de34b831f737f62b241d4317d028886.jpg)\n\n说明\n\n目前，LA2608只支持与 H3C公司的无线控制器互通。\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.1 概述"
+    },
+    {
+        "title": "# 1.2 配置LA2608与无线控制器互通",
+        "content": "# 1.2 配置LA2608与无线控制器互通\n\n如 图 1 所示，LA2608 安装了SIM卡，通过 3G/4G网络连接到运营商无线控制器，并向用户提供无线服务。关于LA2608的安装方法，请参见“H3C LA2608室内无线网关 快速安装指南”。\n\n图1 配置 LA2608与无线控制器互通  \n![LA2608通过WiFi连接Host A/B/C，经3G/4G回传至运营商无线控制器（AC），实现无线接入与互联网互通。](http://localhost:9000/knowledge-base-files/upload-images/H3C LA2608室内无线网关 用户手册-6W100-整本手册/f204a8881b1075be8d2d10c4dc2e261e7f3bcf139057a7bd2350d558b8ea6198.jpg)\n\n<details>\n<summary>flowchart</summary>\n\n```mermaid\ngraph LR\n    A[\"Host A\"] -->|WIFI| B[\"LA2608\"]\n    C[\"Host B\"] -->|WIFI| B\n    D[\"Host C\"] -->|WIFI| B\n    B -->|3G/4G| E[\"Internet\"]\n    E --> F[\"AC\"]\n```\n</details>\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.2 配置LA2608与无线控制器互通"
+    },
+    {
+        "title": "# 1.2.1 配置LA2608",
+        "content": "# 1.2.1 配置LA2608\n\n(1) 配置拨号访问组的拨号控制列表\n\n```txt\n<LA2608>system-view \n```\n\n```txt\n[LA2608]dialer-rule 1 ip permit \n```\n\n(2) 配置 DCC 拨号\n\n![H3C LA2608室内无线网关用户手册中关于DCC拨号配置的插图，展示铅笔在文档上书写场景](http://localhost:9000/knowledge-base-files/upload-images/H3C LA2608室内无线网关 用户手册-6W100-整本手册/e381047ffd55b50c2649968ebbf1e1fb8204f864fcbd8adbaa7c23aafd4126f5.jpg)\n\n说明\n\ndialer number命令用来配置发起呼叫的拨号串，不同运营商的拨号串不同，请用户在配置前向网络运营商获取发起呼叫的拨号串。\n\n```powershell\n[LA2608]interface Cellular-Ethernet2/0\n[LA2608-Cellular-Ethernet2/0]ip address cellular-allocated\n[LA2608-Cellular-Ethernet2/0]dialer enable-circular\n[LA2608-Cellular-Ethernet2/0]dialer-group 1\n[LA2608-Cellular-Ethernet2/0]dialer timer idle 0 \n```\n\n```txt\n[LA2608-Cellular-Ethernet2/0]dialer timer autodial 5\n[LA2608-Cellular-Ethernet2/0]dialer number *99# autodial\n[LA2608-Cellular-Ethernet2/0]nat outbound\n[LA2608-Cellular-Ethernet2/0]quit \n```\n\n(3) 配置 DNS 解析功能\n\n```txt\n[LA2608]dns resolve \n```\n\n(4) 配置静态路由\n\n```txt\n[LA2608]ip route-static 0.0.0.0 0.0.0.0 Cellular-Ethernet2/0 \n```\n\n(5) 指定运营商无线控制器的 IP 地址\n\n```txt\n[LA2608] wlan ac ip 60.191.99.143 \n```\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.2.1 配置LA2608"
+    },
+    {
+        "title": "# 1.2.2 配置运营商无线控制器",
+        "content": "# 1.2.2 配置运营商无线控制器\n\n![黄色铅笔正在纸张上书写，象征用户手册中关于配置运营商无线控制器的步骤说明。](http://localhost:9000/knowledge-base-files/upload-images/H3C LA2608室内无线网关 用户手册-6W100-整本手册/8595b5e0431211ff1fcc244ac1d195c418463eea29d726b873ccc03e27578124.jpg)\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.2.2 配置运营商无线控制器"
+    },
+    {
+        "title": "# 说明",
+        "content": "# 说明\n\n如下配置仅供参考，运营商可根据实际情况进行调整。\n\n(1) 创建业务 VLAN\n\n```txt\n<AC>system-view\n[AC]vlan 2\n[AC-vlan2] quit \n```\n\n(2) 创建 WLAN-ESS 接口并加入业务 VLAN\n\n```txt\n[AC]interface WLAN-ESS 1\n[AC-WLAN-ESS1]port access vlan 2\n[AC-WLAN-ESS1]quit \n```\n\n(3) 配置明文方式的服务模板\n\n```txt\n[AC]wlan service-template 1 clear\n[AC-wlan-st-1]ssid ssidh3c\n[AC-wlan-st-1]bind WLAN-ESS 1\n[AC-wlan-st-1]service-template enable\nPlease wait... Done.\n[AC-wlan-st-1]quit \n```\n\n(4) 开启自动 AP 功能\n\n```txt\n[AC]wlan auto-ap enable\n[AC]wlan ap 2608 model LA2608 id 1\n[AC-wlan-ap-2608]serial-id auto\n[AC-wlan-ap-2608]radio 1\n[AC-wlan-ap-2608-radio-1]service-template 1\n[AC-wlan-ap-2608-radio-1]radio enable\n[AC-wlan-ap-2608-radio-1]quit\n[AC-wlan-ap-2608]quit \n```\n\n(5) 配置 VLAN 接口 IP 地址\n\n```ini\n[AC]interface Vlan-interface 1\n[AC-Vlan-interface1]ip address 60.191.99.143 255.255.0.0\n[AC-Vlan-interface1]quit\n[AC]interface Vlan-interface 2\n[AC-Vlan-interface2]ip address 10.249.136.1 255.255.252.0\n[AC-Vlan-interface2]quit \n```\n\n(6) 使能 DHCP 服务，配置 DHCP 地址池\n\n```txt\n[AC]dhcp enable\n[AC]dhcp server ip-pool vlan2\n[AC-dhcp-pool-vlan1]network 10.249.136.0 22\n[AC-dhcp-pool-vlan1]gateway-list 10.249.136.1\n[AC-dhcp-pool-vlan1]dns-list 218.201.96.130\n[AC-dhcp-pool-vlan1]quit \n```\n",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 说明"
+    },
+    {
+        "title": "# 1.2.3 验证LA2608 与无线控制器是否连通",
+        "content": "# 1.2.3 验证LA2608 与无线控制器是否连通\n\n在无线控制器上执行 display wlan ap 命令，state 字段显示为“R/M”，表示 LA2608 与无线控制器之间已经建立连接。\n\n```txt\n<Sysname> display wlan ap all\nTotal Number of APs configured : 1\nTotal Number of configured APs connected : 1\nTotal Number of auto APs connected : 0\nAP Profiles\nState : I = Idle, J = Join, JA = JoinAck, IL = ImageLoad\nC = Config, R = Run, KU = KeyUpdate, KC = KeyCfm\nM = Master, B = Backup \n```\n\n<table><tr><td>AP Name</td><td>State Model</td><td>Serial-ID</td></tr><tr><td>ap1</td><td>R/M LA2608</td><td>036286A054000033</td></tr></table>",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.2.3 验证LA2608 与无线控制器是否连通"
+    },
+    {
+        "title": "# 1.2.3 验证LA2608 与无线控制器是否连通",
+        "content": "# 1.2.3 验证LA2608 与无线控制器是否连通\n\n在无线控制器上执行 display wlan ap 命令，state 字段显示为“R/M”，表示 LA2608 与无线控制器之间已经建立连接。\n\n```txt\n<Sysname> display wlan ap all\nTotal Number of APs configured : 1\nTotal Number of configured APs connected : 1\nTotal Number of auto APs connected : 0\nAP Profiles\nState : I = Idle, J = Join, JA = JoinAck, IL = ImageLoad\nC = Config, R = Run, KU = KeyUpdate, KC = KeyCfm\nM = Master, B = Backup \n```\n\n<table><tr><td>AP Name</td><td>State Model</td><td>Serial-ID</td></tr><tr><td>ap1</td><td>R/M LA2608</td><td>036286A054000033</td></tr></table>",
+        "file_title": "H3C LA2608室内无线网关 用户手册-6W100-整本手册",
+        "part": 1,
+        "parent_title": "# 1.2.3 验证LA2608 与无线控制器是否连通"
+    }
+]
